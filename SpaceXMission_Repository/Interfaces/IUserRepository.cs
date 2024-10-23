@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SpaceXMission.Entities;
 
-namespace SpaceXMission.Repositories.Interfaces
+namespace SpaceXMission_Repository.Interfaces
 {
     public interface IUserRepository
     {

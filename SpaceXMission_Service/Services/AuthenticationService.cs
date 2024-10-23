@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using SpaceXMission.Dtos;
 using SpaceXMission.Entities;
-using SpaceXMission.Repositories.Interfaces;
-using SpaceXMission.Services.Interfaces;
+using SpaceXMission_Repository.Interfaces;
+using SpaceXMission_Service.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

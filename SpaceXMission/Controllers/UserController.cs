@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpaceXMission.Dtos;
-using SpaceXMission.Services.Interfaces;
+using SpaceXMission_Service.Interfaces;
 
 namespace SpaceXMission.Controllers
 {

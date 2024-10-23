@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SpaceXMission.Entities;
-using SpaceXMission.Repositories.Interfaces;
+using SpaceXMission_Repository.Interfaces;
 
 namespace SpaceXMission.Repositories
 {

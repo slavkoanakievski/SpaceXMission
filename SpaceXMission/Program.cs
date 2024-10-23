@@ -6,9 +6,9 @@ using Microsoft.OpenApi.Models;
 using SpaceXMission.Database;
 using SpaceXMission.Entities;
 using SpaceXMission.Repositories;
-using SpaceXMission.Repositories.Interfaces;
 using SpaceXMission.Services;
-using SpaceXMission.Services.Interfaces;
+using SpaceXMission_Repository.Interfaces;
+using SpaceXMission_Service.Interfaces;
 using System.Text;
 
 namespace SpaceXMission
@@ -114,6 +114,7 @@ namespace SpaceXMission
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("AllowAngularDevClient");
 
             app.UseHttpsRedirection();
 
