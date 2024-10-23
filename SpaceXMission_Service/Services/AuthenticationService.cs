@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+using SpaceXMission.Dtos;
 using SpaceXMission.Entities;
 using SpaceXMission_Repository.Interfaces;
 using SpaceXMission_Service.Interfaces;
+using SpaceXMission_Shared;
+using SpaceXMission_Shared.Constants;
+using SpaceXMission_Shared.Helpers.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 
 namespace SpaceXMission.Services
@@ -15,21 +16,29 @@ namespace SpaceXMission.Services
     {
 
         private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _configuration;
+        private readonly IValidationService _validationService;
+        private readonly ITokenService _tokenService;
 
-        public AuthenticationService(IUserRepository userRepository, IConfiguration configuration)
+        public AuthenticationService(IUserRepository userRepository,
+                                     IValidationService validationService,
+                                     ITokenService tokenService)
         {
             _userRepository = userRepository;
-            _configuration = configuration;
+            _validationService = validationService;
+            _tokenService = tokenService;
         }
 
-        public async Task<string> Register(RegisterDto registerDto)
+        public async Task<ApiResponse<string>> Register(RegisterDto registerDto)
         {
-            ApplicationUser userByEmail = await _userRepository.GetUserByEmailAsync(registerDto.Email);
+            ApiResponse<string> response = new();
 
-            if (userByEmail is not null)
+            ApiResponse<bool> fieldValidationResponse = await _validationService.ValidateFieldsForRegisterAccount(registerDto);
+
+            if (!fieldValidationResponse.Success)
             {
-                throw new ArgumentException($"User with email {registerDto.Email} already exists.");
+                response.Success = fieldValidationResponse.Success;
+                response.ErrorMessage = fieldValidationResponse.ErrorMessage;
+                return response;
             }
 
             ApplicationUser user = new()
@@ -45,24 +54,45 @@ namespace SpaceXMission.Services
 
             if (!result.Succeeded)
             {
-                throw new ArgumentException($"Unable to register user {registerDto.Email} errors: {GetErrorsText(result.Errors)}");
+                response.Success = false;
+                response.ErrorMessage = HelperMethods.GetErrorsText(result.Errors);
+                return response;
             }
 
-            return user.Email;
+            string userId = await _userRepository.GetUserIdByUsernameAsync(registerDto.Email);
+            response.Data = userId;
+            response.Success = true;
+            return response;
         }
 
 
-        public async Task<string> Login(LoginDto loginDto)
+        public async Task<ApiResponse<string>> Login(LoginDto loginDto)
         {
-            ApplicationUser user = await _userRepository.GetUserByUsernameAsync(loginDto.Username);
-            bool isPasswordValid = await _userRepository.CheckPasswordAsync(user, loginDto.Password);
+            ApiResponse<string> response = new ApiResponse<string>() { ErrorMessage = "", Success = false };
 
-            if (user is null || !isPasswordValid)
+            ApiResponse<bool> fieldValidationResponse = await _validationService.ValidateLoginFields(loginDto);
+            if (!fieldValidationResponse.Success)
             {
-                throw new ArgumentException($"Unable to authenticate user {loginDto.Username}");
+                response.ErrorMessage = fieldValidationResponse.ErrorMessage;
+                response.Success = fieldValidationResponse.Success;
+                return response;
             }
 
-            var authClaims = new List<Claim>
+            ApplicationUser user = await _userRepository.GetUserByUsernameAsync(loginDto.Username);
+            if (user == null)
+            {
+                response.ErrorMessage = ErrorMessages.UsernameDoesNotExist;
+                return response;
+            }
+            bool isPasswordValid = await _userRepository.CheckPasswordAsync(user, loginDto.Password);
+
+            if (!isPasswordValid)
+            {
+                response.ErrorMessage = ErrorMessages.InvalidPassword;
+                return response;
+            }
+
+            List<Claim> authClaims = new List<Claim>
         {
             new(ClaimTypes.Name, user.FirstName),
             new(ClaimTypes.Surname, user.LastName),
@@ -70,32 +100,11 @@ namespace SpaceXMission.Services
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
-            var token = GetToken(authClaims);
+            JwtSecurityToken token = _tokenService.GetToken(authClaims);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-
-        private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
-        {
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-            int expiryInHours = int.TryParse(_configuration["JWT:ExpiryInHours"], out int hours) ? hours : 3;
-
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(expiryInHours),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
-
-            return token;
-        }
-
-        private string GetErrorsText(IEnumerable<IdentityError> errors)
-        {
-            return string.Join(", ", errors.Select(error => error.Description).ToArray());
+            response.Data = new JwtSecurityTokenHandler().WriteToken(token);
+            response.Success = true;
+            return response;
         }
     }
 }

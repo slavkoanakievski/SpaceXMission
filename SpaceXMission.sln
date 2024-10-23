@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceXMission_Domain", "Spa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceXMission_Repository", "SpaceXMission_Repository\SpaceXMission_Repository.csproj", "{E2F6B206-94AC-48F3-85BE-2F94D2929720}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceXMission_Shared", "SpaceXMission_Shared\SpaceXMission_Shared.csproj", "{87BE2FCB-4860-4C52-BA9E-F5B8C303273E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{E2F6B206-94AC-48F3-85BE-2F94D2929720}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2F6B206-94AC-48F3-85BE-2F94D2929720}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2F6B206-94AC-48F3-85BE-2F94D2929720}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87BE2FCB-4860-4C52-BA9E-F5B8C303273E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87BE2FCB-4860-4C52-BA9E-F5B8C303273E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87BE2FCB-4860-4C52-BA9E-F5B8C303273E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87BE2FCB-4860-4C52-BA9E-F5B8C303273E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SpaceXMission_Domain\SpaceXMission_Domain.csproj" />
     <ProjectReference Include="..\SpaceXMission_Repository\SpaceXMission_Repository.csproj" />
+    <ProjectReference Include="..\SpaceXMission_Shared\SpaceXMission_Shared.csproj" />
   </ItemGroup>
 
 </Project>

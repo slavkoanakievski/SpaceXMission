@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="4.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SpaceXMission_Domain\SpaceXMission_Domain.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.10" />
   </ItemGroup>
 
 </Project>

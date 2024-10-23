@@ -9,6 +9,7 @@ using SpaceXMission.Repositories;
 using SpaceXMission.Services;
 using SpaceXMission_Repository.Interfaces;
 using SpaceXMission_Service.Interfaces;
+using SpaceXMission_Service.Services;
 using System.Text;
 
 namespace SpaceXMission
@@ -55,6 +56,9 @@ namespace SpaceXMission
 
             // Add services to the container.
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IValidationService, ValidationService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             builder.Services.AddControllers();
