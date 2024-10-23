@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog.Events;
+using Serilog;
 using SpaceXMission.Database;
 using SpaceXMission.Entities;
 using SpaceXMission.Repositories;
@@ -11,6 +13,7 @@ using SpaceXMission_Repository.Interfaces;
 using SpaceXMission_Service.Interfaces;
 using SpaceXMission_Service.Services;
 using System.Text;
+using SpaceXMission.Middlewares;
 
 namespace SpaceXMission
 {
@@ -110,6 +113,19 @@ namespace SpaceXMission
                     });
             });
 
+            // register the GlobalExceptionHandler (registered as singleton)
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
+
+            //Serilog Config
+            Log.Logger = new LoggerConfiguration()
+                        .WriteTo.Console()
+                        .WriteTo.File("logs/log.txt",
+                                      rollingInterval: RollingInterval.Day,
+                                      restrictedToMinimumLevel: LogEventLevel.Error)
+                                      .MinimumLevel.Error()
+                        .CreateLogger();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -121,6 +137,7 @@ namespace SpaceXMission
             app.UseCors("AllowAngularDevClient");
 
             app.UseHttpsRedirection();
+            app.UseExceptionHandler();
 
             app.UseAuthentication();
             app.UseAuthorization();
