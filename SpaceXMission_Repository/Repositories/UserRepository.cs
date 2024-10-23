@@ -82,5 +82,21 @@ namespace SpaceXMission.Repositories
                 throw;
             }
         }
+
+        public async Task<IdentityResult> UpdateRefreshTokenAsync(ApplicationUser user, string refreshToken)
+        {
+            try
+            {
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+                return await _userManager.UpdateAsync(user);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw;
+            }
+        }
     }
 }

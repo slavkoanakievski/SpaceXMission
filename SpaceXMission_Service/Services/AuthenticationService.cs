@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SpaceXMission.Dtos;
 using SpaceXMission.Entities;
+using SpaceXMission_Domain.Dtos;
 using SpaceXMission_Repository.Interfaces;
 using SpaceXMission_Service.Interfaces;
 using SpaceXMission_Shared;
@@ -66,9 +67,9 @@ namespace SpaceXMission.Services
         }
 
 
-        public async Task<ApiResponse<string>> Login(LoginDto loginDto)
+        public async Task<ApiResponse<AuthenticatedResponse>> Login(LoginDto loginDto)
         {
-            ApiResponse<string> response = new ApiResponse<string>() { ErrorMessage = "", Success = false };
+            ApiResponse<AuthenticatedResponse> response = new ApiResponse<AuthenticatedResponse>() { ErrorMessage = "", Success = false };
 
             ApiResponse<bool> fieldValidationResponse = await _validationService.ValidateLoginFields(loginDto);
             if (!fieldValidationResponse.Success)
@@ -100,9 +101,16 @@ namespace SpaceXMission.Services
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
-            JwtSecurityToken token = _tokenService.GetToken(authClaims);
+            JwtSecurityToken accessToken = _tokenService.GetToken(authClaims);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
-            response.Data = new JwtSecurityTokenHandler().WriteToken(token);
+            await _userRepository.UpdateRefreshTokenAsync(user, refreshToken);
+
+            response.Data = new AuthenticatedResponse
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
+                RefreshToken = refreshToken
+            };
             response.Success = true;
             return response;
         }

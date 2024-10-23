@@ -10,5 +10,6 @@ namespace SpaceXMission_Repository.Interfaces
         Task<string> GetUserIdByUsernameAsync(string username);
         Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password);
         Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
+        Task<IdentityResult> UpdateRefreshTokenAsync(ApplicationUser user, string refreshToken);
     }
 }

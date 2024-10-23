@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog.Events;
 using Serilog;
+using Serilog.Events;
 using SpaceXMission.Database;
 using SpaceXMission.Entities;
+using SpaceXMission.Middlewares;
 using SpaceXMission.Repositories;
 using SpaceXMission.Services;
 using SpaceXMission_Repository.Interfaces;
 using SpaceXMission_Service.Interfaces;
 using SpaceXMission_Service.Services;
 using System.Text;
-using SpaceXMission.Middlewares;
 
 namespace SpaceXMission
 {
@@ -61,6 +61,8 @@ namespace SpaceXMission
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IValidationService, ValidationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
