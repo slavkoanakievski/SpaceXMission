@@ -62,6 +62,7 @@ namespace SpaceXMission
             builder.Services.AddScoped<IValidationService, ValidationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ISpaceXMissionService, SpaceXMissionService>();
 
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();

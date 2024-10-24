@@ -12,6 +12,7 @@ namespace SpaceXMission_Shared.Constants
         public const string UserAlreadyExistsError = "A user with this email address already exists. Please use a different email.";
         public const string InvalidEmailOrPasswordFormat = "Invalid email or password format. Please check the requirements.";
         public const string InvalidClientRequest = "Invalid client request.";
+        public const string GenericMessage = "An unexpected error occurred.Please try again later or contact support.";
 
     }
 }

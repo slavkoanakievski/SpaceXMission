@@ -109,7 +109,8 @@ namespace SpaceXMission.Services
             response.Data = new AuthenticatedResponse
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                UserName = user.Email,
             };
             response.Success = true;
             return response;
