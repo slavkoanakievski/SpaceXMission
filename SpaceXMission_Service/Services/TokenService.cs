@@ -26,13 +26,13 @@ namespace SpaceXMission_Service.Services
         public JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
         {
             SymmetricSecurityKey authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-            int expiryInHours = int.TryParse(_configuration["JWT:ExpiryInHours"], out int hours) ? hours : 3;
+            int expiryInMinutes = int.TryParse(_configuration["JWT:ExpiryInMinutes"], out int hours) ? hours : 3;
 
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(expiryInHours),
+                expires: DateTime.Now.AddMinutes(expiryInMinutes),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 
