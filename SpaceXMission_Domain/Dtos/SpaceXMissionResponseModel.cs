@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string FlightNumber { get; set; }
+        public int FlightNumber { get; set; }
         public DateTime DateUtc { get; set; }
         public DateTime DateLocal { get; set; }
         public bool Success { get; set; }

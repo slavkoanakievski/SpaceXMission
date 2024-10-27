@@ -52,13 +52,9 @@ namespace SpaceXMission_Service.Services
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = false, // set to true after successfully implement this and try again
                 ValidAudience = _configuration["JWT:ValidAudience"],
-                ValidateIssuer = false, // set to true after successfully implement this and try again
                 ValidIssuer = _configuration["JWT:ValidIssuer"],
-                ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"])),
-                ValidateLifetime = false
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -115,7 +111,8 @@ namespace SpaceXMission_Service.Services
             response.Data = new AuthenticatedResponse()
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
-                RefreshToken = newRefreshToken
+                RefreshToken = newRefreshToken,
+                UserName = user.Email
             };
 
             return response;

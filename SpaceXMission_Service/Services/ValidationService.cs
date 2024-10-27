@@ -41,7 +41,7 @@ namespace SpaceXMission_Service.Services
                 // validation failed
                 response.ErrorMessage = ErrorMessages.InvalidEmailOrPasswordFormat;
                 return response;
-            }
+                 }
 
             ApplicationUser userByEmail = await _userRepository.GetUserByEmailAsync(registerDto.Email);
 

@@ -6,7 +6,8 @@ namespace SpaceXMission_Domain.Dtos
     {
         public string? Id { get; set; }
         public string? Name { get; set; }
-        public string FlightNumber { get; set; }
+        [JsonProperty("flight_number")]
+        public int FlightNumber { get; set; }
         [JsonProperty("date_utc")]
         public DateTime? DateUtc { get; set; }
         [JsonProperty("date_local")]
